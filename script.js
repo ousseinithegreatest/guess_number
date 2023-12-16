@@ -1,6 +1,8 @@
 'use strict';
 
-let secretNumber = Math.trunc(Math.random() * 20) + 1;
+const MIN = 1;
+const MAX = 20;
+
 let score = 20;
 let highscore = 0;
 
@@ -11,24 +13,37 @@ const scoreCount = document.querySelector('.score');
 const body = document.querySelector('body');
 const again = document.querySelector('.again');
 const guess = document.querySelector('.guess');
+const level = document.querySelector('.level');
+level.textContent = `(Entre ${MIN} et ${MAX})`;
 
 const displayMessage = (message) => {
   document.querySelector('.message').textContent = message;
 };
 
+const colorBackground = (color) => {
+  body.style.backgroundColor = color;
+}
+
+const numberWidth = (width) => {
+  number.style.width = width;
+}
+
+let randomNumber = (min, max) => Math.trunc(Math.random() * max) + min;
+let secretNumber = randomNumber(MIN, MAX);
+
 check.addEventListener('click', () => {
   const guessToNumber = Number(guess.value);
 
   if (!guessToNumber) {
-    displayMessage('⛔️ Pas de nombre !');
+    displayMessage('⭕ Pas de nombre !');
 
   } else if (guessToNumber === secretNumber) {
 
     displayMessage('🎉 Bravo, vous avez gagné !');
     number.textContent = secretNumber;
 
-    body.style.backgroundColor = '#60b347';
-    number.style.width = '30rem';
+    colorBackground('#60b347');
+    numberWidth('30rem');
 
     if (score > highscore) {
       highscore = score;
@@ -41,7 +56,7 @@ check.addEventListener('click', () => {
       score--;
       scoreCount.textContent = score;
     } else {
-      displayMessage('💥 Vous avez perdu!');
+      displayMessage('😔 Vous avez perdu !');
       scoreCount.textContent = 0;
     }
   }
@@ -49,12 +64,11 @@ check.addEventListener('click', () => {
 
 again.addEventListener('click', () => {
   score = 20;
-  secretNumber = Math.trunc(Math.random() * 20) + 1;
-  displayMessage('Commencer à déviner !!!');
+  secretNumber = randomNumber(MIN, MAX);
+  displayMessage('Commencer à déviner !');
   scoreCount.textContent = score;
   number.textContent = '?';
   guess.value = '';
-
-  body.style.backgroundColor = '#222';
-  number.style.width = '15rem';
+  colorBackground('#222');
+  numberWidth('15rem');
 });
